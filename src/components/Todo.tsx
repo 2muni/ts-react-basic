@@ -8,7 +8,7 @@ interface Props {
   handleRemove(): void;
 }
 interface ItemProps {
-  done?: boolean;
+  done: boolean;
 }
 
 const Wrapper = styled.li`
@@ -26,12 +26,12 @@ const Wrapper = styled.li`
     }
   }
 `;
-const Mark = styled.i<ItemProps>`
+const Mark = styled.i`
   display: inline-block;
   visibility: hidden;
   cursor: pointer;
 `;
-const Checked = styled(Mark)`
+const Checked = styled(Mark)<ItemProps>`
   color: ${props =>
     props.done ? props.theme.hlColors.main : props.theme.textColors.secondary};
   visibility: ${props => (props.done ? 'visible' : 'hidden')};

@@ -16,6 +16,6 @@ const Theme = {
     maxWidth: '650px',
     maxWidthCenterd: '600px',
   },
-} as const;
+};
 
 export default Theme;
