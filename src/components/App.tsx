@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { StoreState, actions } from '../redux/modules';
 import { ThemeProvider } from 'styled-components';
-import { v4 as uuid } from 'uuid';
 import GlobalStyles from '../styles/GlobalStyles';
 import Theme from '../styles/Theme';
 import Layout from './Layout';
@@ -9,43 +10,25 @@ import InputForm from './InputForm';
 import List from './List';
 import Todo from './Todo';
 
-interface TodoItem {
-  id: string;
-  text: string;
-  done: boolean;
-}
-
 const App: React.FC = () => {
-  const [todos, setTodos] = useState<TodoItem[]>([]);
+  const dispatch = useDispatch();
   const [input, setInput] = useState<string>('');
+  const { todos } = useSelector((state: StoreState) => state.todos);
 
-  const handleToggle = (id: string) => {
-    const nextTodos = todos.map(item => {
-      if (item.id === id) {
-        item.done = !item.done;
-      }
-      return item;
-    });
-    setTodos(nextTodos);
-  };
-  const handleRemove = (id: string) => {
-    const nextTodos = todos.filter(item => item.id !== id);
-    setTodos(nextTodos);
-  };
   const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
     setInput(value);
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const newTodo: TodoItem = {
-      id: `todo_${uuid()}`,
-      text: input,
-      done: false,
-    };
-    const nextTodos = todos.concat(newTodo);
+    dispatch(actions.todos.create(input));
     setInput('');
-    setTodos(nextTodos);
+  };
+  const handleToggle = (id: string) => {
+    dispatch(actions.todos.toggle(id));
+  };
+  const handleRemove = (id: string) => {
+    dispatch(actions.todos.remove(id));
   };
   return (
     <ThemeProvider theme={Theme}>
